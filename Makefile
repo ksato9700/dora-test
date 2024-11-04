@@ -10,5 +10,17 @@ run-base-python:
 run-python:
 	docker run -it --rm --name dora-python dora-python
 
+build-native-rust:
+	dora build rust/dataflow.yml
+
+run-native-rust:
+	dora start rust/dataflow.yml --name conversation
+
+build-rust:
+	docker build -t dora-rust -f rust/Dockerfile rust
+
+run-rust:
+	docker run -it --rm --name dora-rust dora-rust
+
 watch:
 	docker exec -it dorabase-python /bin/bash
