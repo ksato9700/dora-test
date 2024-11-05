@@ -7,7 +7,7 @@ nodes:
       outputs:
         - image
   - id: plot
-    operator:
-      python: plot.py
+    custom:
+      source: target/debug/plot
       inputs:
         image: webcam/image

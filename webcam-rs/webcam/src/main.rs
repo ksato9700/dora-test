@@ -25,29 +25,27 @@ fn main() -> Result<(), Box<dyn Error>> {
     let (mut node, mut events) = DoraNode::init_from_env()?;
 
     while let Some(event) = events.recv() {
-        match event {
-            Event::Input {
-                id: _,
-                metadata,
-                data: _,
-            } => {
-                let result = video_capture.read(&mut frame)?;
-                println!("Frame read: {}", result);
-                if result {
-                    // let mut buffer = Vector::<u8>::new();
-                    // imencode(".jpg", &frame, &mut buffer, &params)?;
-                    // let array:Vec<u8> = buffer.as_ref().into();
-                    let array: Vec<u8> = frame.data_bytes()?.to_vec();
-                    node.send_output(
-                        DataId::from("image".to_owned()),
-                        metadata.parameters,
-                        array.into_arrow(),
-                    )?;
-                } else {
-                    println!("Error reading frame");
-                }
+        if let Event::Input {
+            id: _,
+            metadata,
+            data: _,
+        } = event
+        {
+            let result = video_capture.read(&mut frame)?;
+            if result {
+                println!("Frame {:?}", frame);
+                // let mut buffer = Vector::<u8>::new();
+                // imencode(".jpg", &frame, &mut buffer, &params)?;
+                // let array:Vec<u8> = buffer.as_ref().into();
+                let array: Vec<u8> = frame.data_bytes()?.to_vec();
+                node.send_output(
+                    DataId::from("image".to_owned()),
+                    metadata.parameters,
+                    array.into_arrow(),
+                )?;
+            } else {
+                println!("Error reading frame");
             }
-            _ => {}
         }
     }
 

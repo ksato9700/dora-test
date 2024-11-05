@@ -4,5 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-opencv = {version = "0.93.3", features = ["clang-runtime"]}
+opencv = { version = "0.93.3", features = ["clang-runtime"] }
 dora-node-api = "0.3.6"
+
+[[bin]]
+name = "webcam"
+path = "src/main.rs"
+
+[[bin]]
+name = "plot"
+path = "src/plot.rs"
