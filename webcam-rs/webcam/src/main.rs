@@ -12,7 +12,21 @@ const CAMERA_WIDTH: f64 = 640.0;
 const CAMERA_HEIGHT: f64 = 480.0;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let mut video_capture = VideoCapture::new(1, opencv::videoio::CAP_ANY)?;
+
+    let camera_index_envvar = std::env::var("CAMERA_INDEX");
+    println!("CAMERA_INDEX env var: {:?}", camera_index_envvar);
+
+    let camera_index_envvar = std::env::var("USER");
+    println!("USER env var: {:?}", camera_index_envvar);
+
+    // get camera index from env, parsed as integer
+    let camera_index: i32 = std::env::var("CAMERA_INDEX")
+        .unwrap_or_else(|_| "0".to_string())
+        .parse()
+        .expect("CAMERA_INDEX must be an integer");
+
+    println!("Opening camera with index {}", camera_index);
+    let mut video_capture = VideoCapture::new(camera_index, opencv::videoio::CAP_ANY)?;
     video_capture.set(opencv::videoio::CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)?;
     video_capture.set(opencv::videoio::CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)?;
 
